@@ -1,0 +1,26 @@
+### Recuperar todas las pelis
+
+GET http://localhost:3000/movies
+
+GET http://localhost:3000/movies/1
+
+GET http://localhost:3000/movies?genre=terror
+
+GET http://localhost:3000/movies?genre=terror
+ 
+
+ ### crear un pelicula
+
+ Content-Type: application/json
+{
+	"title": "Forrest Gumpaaaaaaaaaaaa",
+	"year": 1994,
+	"director": "Robert Zemeckis",
+	"duration": 142,
+	"poster": "https://i.ebayimg.com/images/g/qR8AAOSwkvRZzuMD/s-l1600.jpg",
+	"genre": [
+		"Drama",
+		"Romance"
+	],
+	"rate": 8.8
+}
