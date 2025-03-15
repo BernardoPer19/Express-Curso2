@@ -1,6 +1,12 @@
 import z from "zod";
 
-const genresEnum = z.enum(["Action", "Adventure", "Comedy", "Drama", "Romance"]);
+const genresEnum = z.enum([
+  "Action",
+  "Adventure",
+  "Comedy",
+  "Drama",
+  "Romance",
+]);
 
 export const movieSchema = z.object({
   title: z.string().min(1, "Movie title is required"),
@@ -9,8 +15,10 @@ export const movieSchema = z.object({
   rate: z.number().min(1).max(10).optional(),
   poster: z.string().url(),
   genre: z.array(genresEnum).nonempty("At least one genre is required"),
+  duration: z.number().int().min(1, "Duration must be a positive number"),
 });
 
 export const validateMovie = (obj) => movieSchema.safeParse(obj);
 
-export const validatePartialMovie = (obj) => movieSchema.partial().safeParse(obj);
+export const validatePartialMovie = (obj) =>
+  movieSchema.partial().safeParse(obj);
