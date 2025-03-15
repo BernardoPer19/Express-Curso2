@@ -71,5 +71,10 @@ export class MovieModel {
       console.error("Error en updateMovie:", error.stack);
       throw error;
     }
-  }
+  }   
+
+
+
+
+   //AAAAAA
 }
