@@ -59,17 +59,5 @@ export class MovieModel {
   }
 
   // Actualizar una película
-  static async updateMovie(id, { title, genre }) {
-    try {
-      const { rows } = await pool.query(
-        "UPDATE public.movies SET title = $1, genre = $2 WHERE movie_id = $3 RETURNING movie_id, title, genre",
-        [title, genre, id]
-      );
-      if (rows.length === 0) throw new Error("Película no encontrada");
-      return rows[0];
-    } catch (error) {
-      console.error("Error en updateMovie:", error.stack);
-      throw error;
-    }
-  }
+
 }
