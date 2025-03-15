@@ -1,14 +1,17 @@
-import { MovieModel } from "../PostgresSQL/Postgress.js";
 import {
   validateMovie,
   validatePartialMovie,
 } from "../schema/movies-schema.js";
 
 export class MovieController {
-  static async getAll(req, res) {
+  constructor({ MovieModel }) {
+    this.MovieModel = MovieModel;
+  }
+
+  getAll = async (req, res) => {
     try {
       // const { genre } = req.query;
-      const movies = await MovieModel.getAll();
+      const movies = await this.MovieModel.getAll();
       res.json(movies);
     } catch (error) {
       console.error("Error en getAll:", error.message);
@@ -17,13 +20,12 @@ export class MovieController {
         error: error.message,
       });
     }
-  }
-
-  // Obtener una película por su ID
-  static async getByID(req, res) {
+  };
+  
+  getByID = async (req, res) => {
     const { id } = req.params;
     try {
-      const movie = await MovieModel.getByID({ id });
+      const movie = await this.MovieModel.getByID({ id });
 
       if (!movie) {
         return res.status(404).json({ message: "Película no encontrada" });
@@ -37,23 +39,19 @@ export class MovieController {
         error: error.message,
       });
     }
-  }
+  };
 
-  static async createMovie(req, res) {
+  createMovie = async (req, res) => {
     try {
-      // Validación de los datos de la película
       const result = validateMovie(req.body);
-  
-      // Si la validación falla, retorna los errores
       if (!result.success) {
         return res.status(400).json({
-          error: result.error.errors,  // Aquí retornamos los errores directamente
+          error: result.error.errors, 
         });
       }
-  
-      // Crear la nueva película usando el modelo
-      const newMovie = await MovieModel.createMovie({ input: result.data });
-  
+      const newMovie = await this.MovieModel.createMovie({
+        input: result.data,
+      });
       return res.status(201).json(newMovie);
     } catch (error) {
       console.error("Error en createMovie:", error.message);
@@ -62,11 +60,8 @@ export class MovieController {
         error: error.message,
       });
     }
-  }
-  
-  
-  // Actualizar una película por su ID
-  static async updateMovie(req, res) {
+  };
+  updateMovie = async (req, res) => {
     const { id } = req.params;
     try {
       const result = validatePartialMovie(req.body);
@@ -75,12 +70,12 @@ export class MovieController {
         return res.status(400).json({ error: result.error.format() });
       }
 
-      const updatedMovie = await MovieModel.updateMovie(id, result.data);
+      const updatedMovie = await this.MovieModel.updateMovie(id, result.data);
       if (!updatedMovie) {
         return res.status(404).json({ message: "Película no encontrada" });
       }
 
-      res.json(updatedMovie); // Retorna la película actualizada
+      res.json(updatedMovie); 
     } catch (error) {
       console.error("Error en updateMovie:", error.message);
       res.status(500).json({
@@ -88,19 +83,17 @@ export class MovieController {
         error: error.message,
       });
     }
-  }
-
-  // Eliminar una película por su ID
-  static async deleteMovie(req, res) {
+  };
+   deleteMovie = async (req, res)  => {
     const { id } = req.params;
     try {
-      const result = await MovieModel.deleteMovie(id);
+      const result = await this.MovieModel.deleteMovie(id);
 
       if (!result) {
         return res.status(404).json({ message: "Película no encontrada" });
       }
 
-      res.status(204).send(); // Respuesta con código 204 (sin contenido)
+      res.status(204).send(); 
     } catch (error) {
       console.error("Error en deleteMovie:", error.message);
       res.status(500).json({
